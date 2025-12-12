@@ -1,7 +1,11 @@
-blinker==1.9.0
-click==8.3.1
-Flask==3.1.2
-itsdangerous==2.2.0
-Jinja2==3.1.6
-MarkupSafe==3.0.3
-Werkzeug==3.1.4
+# Python version 3.11
+
+# Flask for the web server
+Flask==3.0.0
+werkzeug==3.0.1
+
+# For generating ULIDs
+python-ulid==2.2.0
+
+# For making HTTP requests (worker to server)
+requests==2.31.0
