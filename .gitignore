@@ -6,8 +6,28 @@
 *.csv
 *.db
 
-GEMINI.md
 
 *.env
 __pycache__/
 *.pyc
+
+/home/alexander/.gemini/tmp/
+GEMINI.md
+
+# Audio files
+*.wav
+*.mp3
+*.m4a
+*.flac
+*.ogg
+
+# Data / outputs
+audio/
+recordings/
+outputs/
+
+# Alembic / migrations
+alembic.ini
+alembic/
+*/alembic/
+*/alembic.ini
