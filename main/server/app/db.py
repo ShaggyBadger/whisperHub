@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 from . import models
 
 # Build the path to the database file within the 'main' directory
-db_path = Path(__file__).parent.parent / "whisperhub.db"
+db_path = Path(__file__).parent / "whisperhub.db"
 
 Base = declarative_base()
 engine = sa.create_engine(f"sqlite:///{db_path}")
@@ -46,7 +46,10 @@ class DbManagement:
         """Load the Alembic config."""
         from pathlib import Path
         config_path = Path(__file__).parent / "alembic.ini"
-        return Config(str(config_path))
+        alembic_dir_path = Path(__file__).parent / "alembic"
+        alembic_cfg = Config(str(config_path))
+        alembic_cfg.set_main_option("script_location", str(alembic_dir_path))
+        return alembic_cfg
 
     def initialize_database(self):
         """Apply all existing migrations (safe to run multiple times)."""

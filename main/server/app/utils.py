@@ -105,7 +105,8 @@ class StoreJob:
                     'ulid': job.ulid,
                     'priority_level': job.priority_level,
                     'file_name': job.file_name,
-                    'file_path': job.file_path
+                    'file_path': job.file_path,
+                    'whisper_model': job.whisper_model
                 }
 
                 return job_dict
@@ -125,8 +126,9 @@ def get_file_path_from_db(ulid):
         query = query.filter(Jobs.ulid == ulid)
         entry = query.first()
 
-        file_path = entry.file_path
-        return file_path
+        if entry:
+            return entry.file_path
+        return None
 
     except Exception as e:
         db_session.rollback()
@@ -134,3 +136,26 @@ def get_file_path_from_db(ulid):
     
     finally:
         db_session.close()
+
+def heartbeat_handler(ulid):
+    session = db.SessionLocal()
+
+    try:
+        job = session.query(Jobs).filter(Jobs.ulid == ulid).first()
+
+        if not job:
+            return 'job_not_found'
+
+        # update the status
+        job.status = 'receiving heartbeat'
+        
+        session.commit()
+        return 'good'
+    
+    except Exception as e:
+        session.rollback()
+        print(f'Error processing heartbeat for {ulid}: {e}')
+        return 'error occured'
+    
+    finally:
+        session.close()

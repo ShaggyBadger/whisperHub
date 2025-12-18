@@ -16,7 +16,10 @@ class Jobs(db.Base):
     ulid = Column(String, unique=True, index=True)
     status = Column(String, default="pending") # e.g., pending, processing, completed
     priority_level = Column(String, default="low") # e.g., low, medium, high
+    whisper_model = Column(String, default="medium") # option to select a whisper model
     file_name = Column(String)  # Original file name
     file_path = Column(String)  # Path to associated file
     created_at = Column(DateTime, default=utcnow)
     updated_at = Column(DateTime, default=utcnow, onupdate=utcnow)
+    transcript_path = Column(String, nullable=True) # Stores the path to the transcript file
+

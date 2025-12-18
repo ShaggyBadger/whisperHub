@@ -4,3 +4,4 @@ app = FastAPI()
 
 # Import endpoints to register them
 from . import main
+
