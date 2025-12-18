@@ -2,6 +2,8 @@ import ulid
 from .models import Jobs
 from pathlib import Path
 from . import db
+from sqlalchemy import case
+
 
 # Define the paths for the audio files
 AUDIO_FILE_DIR = Path(__file__).parent / "audio_files"
@@ -25,7 +27,6 @@ class StoreJob:
         self.priority_level = priority_level
         self.file = file
 
-    
     def build_mp3_path(self):
         AUDIO_FILE_DIR.mkdir(parents=True, exist_ok=True)
         
@@ -70,3 +71,66 @@ class StoreJob:
             db_session.close()
         
         return status_code
+
+    def get_next_job():
+        # logic to request a new job from the database
+        db_session = db.SessionLocal()
+        try:
+            query = db_session.query(Jobs)
+            query = query.filter(Jobs.status == 'pending')
+            query = query.filter(Jobs.priority_level == 'low')
+            query = query.order_by(Jobs.created_at.asc())
+            low_priority_job = query.first()
+
+            query = db_session.query(Jobs)
+            query = query.filter(Jobs.status == 'pending')
+            query = query.filter(Jobs.priority_level == 'high')
+            query = query.order_by(Jobs.created_at.asc())
+            high_priority_job = query.first()
+
+            job = None
+            
+            if low_priority_job:
+                job = low_priority_job
+            
+            if high_priority_job:
+                job = high_priority_job
+            
+            if job:
+                # update job status and return job
+                job.status = "transcribing"
+                db_session.commit()
+
+                job_dict = {
+                    'ulid': job.ulid,
+                    'priority_level': job.priority_level,
+                    'file_name': job.file_name,
+                    'file_path': job.file_path
+                }
+
+                return job_dict
+        except Exception as e:
+            print(f"Error requesting new job: {e}")
+            db_session.rollback()
+            return None
+        
+        finally:
+            db_session.close()
+
+def get_file_path_from_db(ulid):
+    db_session = db.SessionLocal()
+
+    try:
+        query = db_session.query(Jobs)
+        query = query.filter(Jobs.ulid == ulid)
+        entry = query.first()
+
+        file_path = entry.file_path
+        return file_path
+
+    except Exception as e:
+        db_session.rollback()
+        return None
+    
+    finally:
+        db_session.close()
