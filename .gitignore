@@ -25,6 +25,7 @@ GEMINI.md
 audio/
 recordings/
 outputs/
+audio_files/
 
 # Alembic / migrations
 alembic.ini

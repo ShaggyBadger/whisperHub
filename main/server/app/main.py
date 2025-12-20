@@ -102,7 +102,8 @@ async def return_job(
     transcript: str = Form(...)
 ):
     """
-    Endpoint for the worker to return the transcription result.
+    Endpoint for the worker to return the transcri][un7hn7,nm.mp0
+    ption result.
     The transcript is saved to a .txt file in the same directory as the audio file.
     The database is updated with the path to the transcript file.
     """
