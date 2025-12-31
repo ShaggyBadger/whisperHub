@@ -7,6 +7,9 @@ from alembic.config import Config
 from datetime import datetime, timezone
 
 from . import models
+from .logger import get_logger
+
+logger = get_logger(__name__)
 
 # Build the path to the database file within the 'main' directory
 db_path = Path(__file__).parent / "whisperhub.db"
@@ -32,15 +35,15 @@ class DbManagement:
 
     def menu(self):
         while True:
-            print("\n***\nDatabase Management Menu:")
+            logger.info("\n***\nDatabase Management Menu:")
             for key, func in self.options.items():
-                print(f"{key}: {func.__name__}")
+                logger.info(f"{key}: {func.__name__}")
             choice = input("Choose an option: ").strip()
             action = self.options.get(choice)
             if action:
                 action()
             else:
-                print("Invalid choice. Please try again.\n***\n")
+                logger.warning("Invalid choice. Please try again.\n***\n")
 
     def get_alembic_config(self):
         """Load the Alembic config."""
@@ -53,10 +56,10 @@ class DbManagement:
 
     def initialize_database(self):
         """Apply all existing migrations (safe to run multiple times)."""
-        print("Applying existing migrations...")
+        logger.info("Applying existing migrations...")
         alembic_cfg = self.get_alembic_config()
         command.upgrade(alembic_cfg, "head")
-        print("Database initialized or updated to latest schema!")
+        logger.info("Database initialized or updated to latest schema!")
 
     def make_migrations(self):
         """Generate a new migration script from model changes."""
@@ -64,19 +67,19 @@ class DbManagement:
         msg = input("Enter a message for this migration: ").strip()
         if msg:
             command.revision(alembic_cfg, message=msg, autogenerate=True)
-            print(f"Migration '{msg}' created!")
+            logger.info(f"Migration '{msg}' created!")
         else:
-            print("No message provided. Migration cancelled.")
+            logger.warning("No message provided. Migration cancelled.")
 
     def run_migrations(self):
         """Apply pending migrations."""
-        print("Applying migrations...")
+        logger.info("Applying migrations...")
         alembic_cfg = self.get_alembic_config()
         command.upgrade(alembic_cfg, "head")
-        print("Migrations applied successfully!")
+        logger.info("Migrations applied successfully!")
 
     def quit_program(self):
-        print("Exiting database management.")
+        logger.info("Exiting database management.")
         sys.exit()
 
 if __name__ == "__main__":

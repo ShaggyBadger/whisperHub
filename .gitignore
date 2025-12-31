@@ -5,6 +5,8 @@
 .python-version
 *.csv
 *.db
+*.log
+GEMINI.md
 
 
 *.env
@@ -12,7 +14,7 @@ __pycache__/
 *.pyc
 
 /home/alexander/.gemini/tmp/
-GEMINI.md
+
 
 # Audio files
 *.wav
