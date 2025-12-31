@@ -76,8 +76,11 @@ class StoreJob:
         # logic to request a new job from the database
         db_session = db.SessionLocal()
         try:
+            # update this list with any other relevent statuses
+            relevent_status = ['pending', 'failed'] 
+
             query = db_session.query(Jobs)
-            query = query.filter(Jobs.status == 'pending')
+            query = query.filter(Jobs.status.in_(relevent_status))
             query = query.filter(Jobs.priority_level == 'low')
             query = query.order_by(Jobs.created_at.asc())
             low_priority_job = query.first()
