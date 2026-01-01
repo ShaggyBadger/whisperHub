@@ -22,7 +22,7 @@ class StoreJob:
         ):
 
         # generate ULID for the job
-        self.ulid = str(ulid.new())
+        self.ulid = str(ulid.ulid())
         logger.debug(f"New StoreJob instance created with ULID: {self.ulid}")
         
         # Set status and stuff or default
