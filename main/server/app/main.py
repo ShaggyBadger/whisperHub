@@ -3,8 +3,8 @@ from . import app
 import os
 from pathlib import Path
 from .utils import StoreJob
-from .utils import get_file_path_from_db
-from .utils import heartbeat_handler
+from main.server.app.utils import get_file_path_from_db
+from main.server.app.utils import heartbeat_handler
 from fastapi import UploadFile, File, Form, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.responses import FileResponse
@@ -13,9 +13,9 @@ from requests_toolbelt import MultipartEncoder
 from fastapi import APIRouter
 from sqlalchemy import distinct, func
 
-from .db import SessionLocal
-from .models import Jobs
-from .logger import get_logger
+from main.server.app.db import SessionLocal
+from main.server.app.models import Jobs
+from main.server.app.logger import get_logger
 
 logger = get_logger(__name__)
 
