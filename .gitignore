@@ -5,7 +5,7 @@
 .python-version
 *.csv
 *.db
-*.log
+*.log*
 GEMINI.md
 
 
