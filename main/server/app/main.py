@@ -1,5 +1,4 @@
 from requests import Session
-from . import app
 import os
 from pathlib import Path
 from .utils import StoreJob
@@ -13,6 +12,7 @@ from requests_toolbelt import MultipartEncoder
 from fastapi import APIRouter
 from sqlalchemy import distinct, func
 
+from . import app
 from main.server.app.db import SessionLocal
 from main.server.app.models import Jobs
 from main.server.app.logger import get_logger
@@ -60,8 +60,9 @@ async def request_mp3(ulid):
 @app.post("/new-job")
 async def new_job(
     priority_level: str = Form("low"),
+    whisper_model: str = Form("medium"),
     file: UploadFile = File(...)
-):
+    ):
     """
     Endpoint to create a new job
 
@@ -72,6 +73,7 @@ async def new_job(
     logger.info(f"New job creation request received for file: {file.filename}")
     job = StoreJob(
         priority_level=priority_level,
+        whisper_model=whisper_model,
         filename=file.filename, 
         file=file
         )
