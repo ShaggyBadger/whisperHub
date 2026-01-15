@@ -16,13 +16,17 @@ class StoreJob:
     def __init__(
         self, 
         priority_level = "low",
+        ulid = None,
         filename = "",
         file = None, 
         status = "pending"
         ):
 
         # generate ULID for the job
-        self.ulid = str(ulid.ulid())
+        if not ulid:  # if no ULID provided, generate a new one
+            self.ulid = str(ulid.ulid())
+        else:
+            self.ulid = ulid  # use provided ULID
         logger.debug(f"New StoreJob instance created with ULID: {self.ulid}")
         
         # Set status and stuff or default

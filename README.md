@@ -19,10 +19,10 @@ whisperHub is a Flask-based web application that accepts audio files, transcribe
 
 ## How it works
 
-1. A client sends a POST request to the `/submit` endpoint with an audio file and metadata.
-2. The Flask server generates a unique job ID, saves the audio file and metadata, and adds the job to a queue.
-3. The server spawns a `whisper_worker` subprocess to process the job.
-4. The `whisper_worker` reads the job data, performs the transcription (placeholder), and sends a POST callback to the server with the result.
+1. A client sends a POST request to the `/new-job` endpoint with an audio file, metadata, and the ULID
+2. The Flask server generates a unique job ID if one is not provided, saves the audio file and metadata, and adds the job to a queue.
+3. The server listens for someone to request a new job and sends one to be transcribed
+4. The worker sends a message back to the server when the job is done
 5. The server updates the job status.
 6. The client can poll the `/status` endpoint to get the job result.
 
