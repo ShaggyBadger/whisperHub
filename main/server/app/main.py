@@ -2,8 +2,7 @@ from requests import Session
 import os
 from pathlib import Path
 from .utils import StoreJob
-from main.server.app.utils import get_file_path_from_db
-from main.server.app.utils import heartbeat_handler
+from .utils import get_file_path_from_db, heartbeat_handler
 from fastapi import UploadFile, File, Form, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.responses import FileResponse
@@ -13,9 +12,9 @@ from fastapi import APIRouter
 from sqlalchemy import distinct, func
 
 from . import app
-from main.server.app.db import SessionLocal
-from main.server.app.models import Jobs
-from main.server.app.logger import get_logger
+from .db import SessionLocal
+from .models import Jobs
+from .logger import get_logger
 
 logger = get_logger(__name__)
 
@@ -61,7 +60,7 @@ async def request_mp3(ulid):
 async def new_job(
     priority_level: str = Form("low"),
     whisper_model: str = Form("medium"),
-    ulid: str = Form(None),
+    ulid: str = Form(None),  # user can provide ULID if they want
     file: UploadFile = File(...)
     ):
     """
@@ -76,7 +75,8 @@ async def new_job(
         priority_level=priority_level,
         whisper_model=whisper_model,
         filename=file.filename, 
-        file=file
+        file=file,
+        ulid=ulid
         )
     
     # Store the job and return status

@@ -16,23 +16,25 @@ class StoreJob:
     def __init__(
         self, 
         priority_level = "low",
-        ulid = None,
+        whisper_model = "medium",
+        ulid_ = None,
         filename = "",
         file = None, 
         status = "pending"
         ):
 
         # generate ULID for the job
-        if not ulid:  # if no ULID provided, generate a new one
-            self.ulid = str(ulid.ulid())
+        if not ulid_:  # if no ULID provided, generate a new one
+            self.ulid = str(ulid.new())
         else:
-            self.ulid = ulid  # use provided ULID
+            self.ulid = ulid_  # use provided ULID
         logger.debug(f"New StoreJob instance created with ULID: {self.ulid}")
         
         # Set status and stuff or default
         self.status = status
         self.filename = filename
         self.priority_level = priority_level
+        self.whisper_model = whisper_model
         self.file = file
 
     def build_mp3_path(self):
@@ -51,6 +53,7 @@ class StoreJob:
             "ulid": str(self.ulid),
             "status": self.status,
             "priority_level": self.priority_level,
+            "whisper_model": self.whisper_model,
             "file_name": self.filename,
             "file_path": self.build_mp3_path()
         }
