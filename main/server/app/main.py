@@ -60,7 +60,7 @@ async def request_mp3(ulid):
 async def new_job(
     priority_level: str = Form("low"),
     whisper_model: str = Form("medium"),
-    ulid: str = Form(None),  # user can provide ULID if they want
+    ulid_: str = Form(None),  # user can provide ULID if they want
     file: UploadFile = File(...)
     ):
     """
@@ -76,7 +76,7 @@ async def new_job(
         whisper_model=whisper_model,
         filename=file.filename, 
         file=file,
-        ulid=ulid
+        ulid_=ulid_
         )
     
     # Store the job and return status
